@@ -1,26 +1,27 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { NavController, NavParams, LoadingController } from 'ionic-angular';
 import { ApiProvider } from '../../providers/api';
 import { DetailPostPage } from '../detail-post/detail-post';
-import { SearchPage } from '../search/search';
 
 @Component({
-    selector: 'page-home',
-    templateUrl: 'home.html'
+    selector: 'page-category-post',
+    templateUrl: 'category-post.html',
 })
-export class HomePage {
+export class CategoryPostPage {
+    category: string
+    categoryName: string
     posts: any = []
     page: number = 1
     infiniteScroll: boolean = true
-    offset = 100
-    constructor(public navCtrl: NavController, private api: ApiProvider, private loadingCtrl: LoadingController) {
-        
+    constructor(public navCtrl: NavController, private api: ApiProvider, private loadingCtrl: LoadingController, private navParams: NavParams) {
+        this.category = this.navParams.get('category')
+        this.categoryName = this.navParams.get('categoryName')
     }
     
     ionViewDidLoad() {
         let loader = this.loadingCtrl.create()
         loader.present()
-        this.api.getPost(this.page).subscribe(data => {
+        this.api.getPostCategory(this.category, this.page).subscribe(data => {
             loader.dismiss()
             for (let i = 0; i < data.length; i++) {
                 let image
@@ -41,7 +42,7 @@ export class HomePage {
     
     doInfinite(infiniteScroll) {
         this.page += 1
-        this.api.getPost(this.page).subscribe(data => {
+        this.api.getPostCategory(this.category, this.page).subscribe(data => {
             for (let i = 0; i < data.length; i++) {
                 let image
                 if (data[i]['_embedded']['wp:featuredmedia'] != undefined) {
@@ -57,15 +58,15 @@ export class HomePage {
                 })
             }
             infiniteScroll.complete();
-        }, error => console.log(error))
+        }, error => {
+            console.log(error);
+            infiniteScroll.complete();
+            this.infiniteScroll = false
+        })
     }
 
     toDetail(index) {
         this.navCtrl.push(DetailPostPage, {content: this.posts[index]})
-    }
-
-    showSearch() {
-        this.navCtrl.push(SearchPage)
     }
     
 }

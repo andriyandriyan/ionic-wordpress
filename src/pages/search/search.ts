@@ -1,27 +1,21 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Subject } from 'rxjs/Subject';
 import { ApiProvider } from '../../providers/api';
 import { DetailPostPage } from '../detail-post/detail-post';
-import { SearchPage } from '../search/search';
 
 @Component({
-    selector: 'page-home',
-    templateUrl: 'home.html'
+    selector: 'page-search',
+    templateUrl: 'search.html',
 })
-export class HomePage {
+export class SearchPage {
+    searchValue = new Subject<string>()
     posts: any = []
     page: number = 1
     infiniteScroll: boolean = true
-    offset = 100
-    constructor(public navCtrl: NavController, private api: ApiProvider, private loadingCtrl: LoadingController) {
-        
-    }
-    
-    ionViewDidLoad() {
-        let loader = this.loadingCtrl.create()
-        loader.present()
-        this.api.getPost(this.page).subscribe(data => {
-            loader.dismiss()
+    constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider) {
+        this.api.search(this.searchValue, this.page).subscribe(data => {
+            this.posts = []
             for (let i = 0; i < data.length; i++) {
                 let image
                 if (data[i]['_embedded']['wp:featuredmedia'] != undefined) {
@@ -36,12 +30,16 @@ export class HomePage {
                     content: data[i].content
                 })
             }
-        }, error => console.log(error))
+        })
+    }
+    
+    ionViewDidLoad() {
+        console.log('ionViewDidLoad SearchPage');
     }
     
     doInfinite(infiniteScroll) {
         this.page += 1
-        this.api.getPost(this.page).subscribe(data => {
+        this.api.searchPost(this.searchValue, this.page).subscribe(data => {
             for (let i = 0; i < data.length; i++) {
                 let image
                 if (data[i]['_embedded']['wp:featuredmedia'] != undefined) {
@@ -63,9 +61,4 @@ export class HomePage {
     toDetail(index) {
         this.navCtrl.push(DetailPostPage, {content: this.posts[index]})
     }
-
-    showSearch() {
-        this.navCtrl.push(SearchPage)
-    }
-    
 }

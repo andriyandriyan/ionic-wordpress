@@ -6,25 +6,43 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
+import { CategoryPostPage } from '../pages/category-post/category-post';
+import { DetailPostPage } from '../pages/detail-post/detail-post';
+import { SearchPage } from '../pages/search/search';
+
+import { HttpClientModule } from '@angular/common/http'
+import { ApiProvider } from '../providers/api';
+import { HighlightModule } from 'ngx-highlightjs';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 @NgModule({
-  declarations: [
-    MyApp,
-    HomePage
-  ],
-  imports: [
-    BrowserModule,
-    IonicModule.forRoot(MyApp)
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    MyApp,
-    HomePage
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
-  ]
+    declarations: [
+        MyApp,
+        HomePage,
+        DetailPostPage,
+        CategoryPostPage,
+        SearchPage
+    ],
+    imports: [
+        BrowserModule,
+        HttpClientModule,
+        IonicModule.forRoot(MyApp),
+        HighlightModule.forRoot(),
+        LazyLoadImageModule
+    ],
+    bootstrap: [IonicApp],
+    entryComponents: [
+        MyApp,
+        HomePage,
+        DetailPostPage,
+        CategoryPostPage,
+        SearchPage
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        {provide: ErrorHandler, useClass: IonicErrorHandler},
+        ApiProvider
+    ]
 })
 export class AppModule {}

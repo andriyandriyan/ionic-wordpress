@@ -1,3 +1,15 @@
-page-home {
+page-home, page-category-post, page-search {
+    ion-note {
+        font-size: 12px;
+        align-self: flex-start;
+        margin-top: 14px;
+        position: absolute;
+        right: 10px;
+    }
 
+    ion-item {
+        .label-ios {
+            margin: 25px 8px 20px 0 !important;
+        }
+    }
 }

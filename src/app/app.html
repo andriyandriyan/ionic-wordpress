@@ -1,1 +1,26 @@
-<ion-nav [root]="rootPage"></ion-nav>
+<ion-menu [content]="content">
+    <ion-header>
+        <ion-toolbar color="primary">
+            <ion-title>Menu</ion-title>
+        </ion-toolbar>
+    </ion-header>
+    
+    <ion-content>
+        <ion-list no-margin>
+            <button ion-item menuClose (click)="homePage()">
+                <ion-icon name="home" item-left></ion-icon>
+                Home
+            </button>
+        </ion-list>
+        <ion-item-group>
+            <ion-item-divider color="light">Category</ion-item-divider>
+            <ion-item menuClose ion-item *ngFor="let category of categories; let i = index" (click)="openPage(i)">
+                    <ion-icon name="ios-arrow-forward" item-left></ion-icon>{{category.name}}
+            </ion-item>
+        </ion-item-group>
+    </ion-content>
+    
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

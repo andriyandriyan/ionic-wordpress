@@ -3,12 +3,7 @@
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
-        <ion-title>Ionic Wordpress</ion-title>
-        <ion-buttons end (click)="showSearch()">
-            <button ion-button icon-only>
-                <ion-icon name="search"></ion-icon>
-            </button>
-        </ion-buttons>
+        <ion-title>{{ categoryName }}</ion-title>
     </ion-navbar>
 </ion-header>
 
@@ -16,7 +11,7 @@
     <ion-list>
         <ion-item *ngFor="let post of posts; let i = index" text-wrap (click)="toDetail(i)">
             <ion-thumbnail item-start>
-                <img [lazyLoad]="post.image" [useSrcset]="true">
+                <img [src]="post.image">
             </ion-thumbnail>
             <h2 [innerHTML]="post.title"></h2>
             <ion-note item-end>{{ post.date | date:'d MMM yyyy HH:mm' }}</ion-note>
